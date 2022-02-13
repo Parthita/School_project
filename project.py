@@ -1,4 +1,5 @@
 import mysql.connector as c
+from datetime import datetime
 myc=c.connect(host="localhost",user="root",passwd="",database="user_database")
 cursor=myc.cursor()
 print("Welcome to XYZ")
@@ -39,47 +40,74 @@ def old_password_entry():
         for j in range(len(password)):
             if old_password==check_password[0]:
                 print("Correct Password")
-                old_password_entry.op=0
+                time_calc()
                 break
             elif old_password_entry.op==1:
                 print("Wrong Password")
                 old_password_entry()
         break
 def new_entry():
-    ep_1 = "INSERT INTO user_data (Name,Password,study_time) VALUES (%s,%s,%s)"
+
     new_name = input("Please enter your name")
+    cursor.execute("select name from user_data")
+    name = cursor.fetchall()
+    nc=1
+    namel=[]
+    while nc==1:
+        for check_name in name:
+            namel.append(check_name[0])
+
+        if new_name in namel:
+            print("Username already there enter a new name ")
+            new_name = input("Please enter your name")
+        else:
+            nc=0
+            break
+
+
+
     new_password = input("Please enter your password")
     new_time=int(input("How much time you want to study"))
-    ep_2 = (new_name, new_password,new_time)
+    new_et=int(input("Jei time a entry korbe"))
+    ep_1 = "INSERT INTO user_data (Name,Password,study_time,entry_time) VALUES (%s,%s,%s,%s)"
+    ep_2 = (new_name, new_password,new_time,new_et)
     cursor.execute(ep_1, ep_2)
     myc.commit()
+    print("you account has been created now relogin")
+    old_entry_name()
 def time_calc():
-    a=int(input("Hello User how much time u studied today?:"))
-    ct=("Select study_time from user_data where name=(%s)")
-    cursor.execute(ct,(old_entry_name.old_name,))
-    time=cursor.fetchall()
-    for abc in time:
-        timec=abc[0]
-
-
-    if a < timec:
-        print("You studied ",timec-a,"hours less today")
-        print("Would you like to add todays waste to tommorows schedule to makeup")
-        #bakitatorakoris
-    elif a > timec:
-        print("You studied ",a-timec,"hours less today")
-        print("Studying more is not bad")
-        print("Would you like to cut from tommorows schedule")
-        #baki ta tora koris
-    elif a==timec:
-        print("Congratssss!!!!! ")
-        print("You satisfied your schedule today")
-
-
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    a = int(current_time[0])
+    b = int(current_time[1])
+    c = 10 * a + b
+    cet = ("Select entry_time from user_data where name=(%s)")
+    cursor.execute(cet, (old_entry_name.old_name,))
+    et = cursor.fetchall()
+    for abd in et:
+        timeet=abd[0]
+    if timeet==c:
+        a = int(input("Hello User how much time u studied today?:"))
+        ct = ("Select study_time from user_data where name=(%s)")
+        cursor.execute(ct, (old_entry_name.old_name,))
+        time = cursor.fetchall()
+        for abc in time:
+            timec = abc[0]
+        if a < timec:
+            print("You studied ", timec - a, "hours less today")
+            print("Would you like to add todays waste to tommorows schedule to makeup")
+            # bakitatorakoris
+        elif a > timec:
+            print("You studied ", a - timec, "hours less today")
+            print("Studying more is not bad")
+            print("Would you like to cut from tommorows schedule")
+            # baki ta tora koris
+        elif a == timec:
+            print("Congratssss!!!!! ")
+            print("You satisfied your schedule today")
+    else:
+        pass#bakitatorakoris
 entry()
-if old_password_entry.op==0:
-    time_calc()
-
 
 
 
