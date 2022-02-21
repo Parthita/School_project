@@ -63,9 +63,6 @@ def new_entry():
         else:
             nc=0
             break
-
-
-
     new_password = input("Please enter your password")
     new_time=int(input("How much time you want to study"))
     new_et=int(input("Jei time a entry korbe"))
@@ -86,7 +83,7 @@ def time_calc():
     et = cursor.fetchall()
     for abd in et:
         timeet=abd[0]
-    if timeet==c:
+    if timeet==c or timeet>c:
         a = int(input("Hello User how much time u studied today?:"))
         ct = ("Select study_time from user_data where name=(%s)")
         cursor.execute(ct, (old_entry_name.old_name,))
@@ -100,14 +97,18 @@ def time_calc():
         elif a > timec:
             print("You studied ", a - timec, "hours less today")
             print("Studying more is not bad")
-            print("Would you like to cut from tommorows schedule")
+            print("But Would you like to cut time  from tommorows schedule")
             # baki ta tora koris
         elif a == timec:
             print("Congratssss!!!!! ")
             print("You satisfied your schedule today")
     else:
-        pass#bakitatorakoris
+        if timeet<c:
+            print("You are ",c-timeet,"hours early than your data entering time that you gave")
+
 entry()
+
+
 
 
 
