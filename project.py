@@ -92,13 +92,9 @@ def time_calc():
             timec = abc[0]
         if a < timec:
             print("You studied ", timec - a, "hours less today")
-            print("Would you like to add todays waste to tommorows schedule to makeup")
-            # bakitatorakoris
         elif a > timec:
             print("You studied ", a - timec, "hours less today")
             print("Studying more is not bad")
-            print("But Would you like to cut time  from tommorows schedule")
-            # baki ta tora koris
         elif a == timec:
             print("Congratssss!!!!! ")
             print("You satisfied your schedule today")
